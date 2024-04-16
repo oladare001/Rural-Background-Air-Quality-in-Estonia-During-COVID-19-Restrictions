@@ -1,0 +1,272 @@
+---
+title: "Ameke"
+author: "DavidSon"
+date: "2024-01-28"
+output: html_document
+---
+
+```{r plot_code, echo=FALSE}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(tidyr)
+library(readr)
+library(openxlsx)
+library(ggplot2)
+library(rmarkdown)
+library(rlang)
+```
+
+
+#Import data
+
+```{r}
+AM<- read_xlsx("Result/Mastercombinereasultlist.xlsx", sheet = "SheetB")
+```
+
+```{r}
+AM2<- select(AM, Nox2018, Nox2019, Nox2020,Windspeed_Averageweekly2018, Temperature_Averageweekly2018, Windspeed_Averageweekly2019, Temperature_Averageweekly2019,Windspeed_Averageweekly2020, Temperature_Averageweekly2020, Noxemission_2018, Noxemission_2019, Noxemission_2020)
+```
+
+
+
+
+#Graph1<-
+```{r}
+df_long <- AM2 %>%
+  pivot_longer(cols = everything(),
+               names_to = c(".value", "Year"),
+               names_pattern = "(\\D+)(\\d+)")
+```
+
+```{r}
+# List of dependent variable names
+dependent_vars <- c("Windspeed_Averageweekly", "Temperature_Averageweekly", "Nox")
+```
+
+#NOXEmission
+
+#GraphA<-
+```{r}
+# Plot graph with trendlines
+GraphA<-ggplot(df_long, aes(x = Noxemission_ , y =Temperature_Averageweekly, color = Year)) +
+  geom_smooth(method = "lm", se = FALSE, linetype = "dotted") +
+  geom_point() +
+  facet_wrap(~ 'AverageWeekly_Trendlines of NoxEmission & Temp (2018_2020)', scales = "free_y") +
+  labs(x = "Noxemission", y = "Temperature_Averageweekly", color = "Years") +
+  theme_minimal()+
+  
+  geom_text(data = equations_df, aes(label =paste(X.Year.2018...y...1.45.x..47.42.R.2...0.81.,X.Year.2019...y...1.49.x..50.56.R.2...0.83.,X.Year.2020...y...0.93.x..28.15.R.2...0.55.),x = Inf, y = -Inf, hjust = 1, vjust = 0), size = 2.5)
+```
+
+
+
+#GraphB<-
+```{r}
+# Plot graph with trendlines
+GraphB<-ggplot(df_long, aes(x = Noxemission_ , y =Windspeed_Averageweekly, color = Year)) +
+  geom_smooth(method = "lm", se = FALSE, linetype = "dotted") +
+  geom_point() +
+  facet_wrap(~ 'AverageWeekly_Trendlines of NoxEmission & Windspeed (2018_2020)', scales = "free_y") +
+  labs(x = "Noxemission", y = "Windspeed_Averageweekly", color = "Years") +
+  theme_minimal()+
+  geom_text(data = equations_df2, aes(label =paste(X.Year.2018...y....0.02.x..2.83.R.2...0.09.,X.Year.2019...y....0.05.x..4.31.R.2...0.36.,X.Year.2020...y....0.05.x..4.38.R.2...0.3.),x = Inf, y = -Inf, hjust = 1, vjust = 0), size = 2.5)
+```
+#GraphC<-
+```{r}
+# Plot graph with trendlines
+GraphC<-ggplot(df_long, aes(x = Noxemission_ , y =Nox, color = Year)) +
+  geom_smooth(method = "lm", se = FALSE, linetype = "dotted") +
+  geom_point() +
+  facet_wrap(~ 'AverageWeekly_Trendlines of NoxEmission & Windspeed (2018_2020)', scales = "free_y") +
+  labs(x = "Noxemission", y = "Noxconcentration", color = "Years") +
+  theme_minimal()+
+  geom_text(data = equations_df3, aes(label =paste(X.Year.2018...y....0.06.x..3.41.R.2...0.43.,X.Year.2019...y....0.05.x..2.72.R.2...0.4.,X.Year.2020...y....0.02.x..1.26.R.2...0.46.),x = Inf, y = -Inf, hjust = 1, vjust = 0), size = 2.5)
+```
+
+
+
+
+
+
+
+
+
+#Noxconentration
+
+#Graph4<-
+```{r}
+# Plot graph with trendlines
+Graph4<-ggplot(df_long, aes(x = Temperature_Averageweekly, y =Nox , color = Year)) +
+  geom_smooth(method = "lm", se = FALSE, linetype = "dotted") +
+  geom_point() +
+  facet_wrap(~ 'AverageWeekly_Trendlines of Noxconcentration & Temp (2018_2020)', scales = "free_y") +
+  labs(x = "Temperature_Averageweekly", y = "Noxconcentration", color = "Years") +
+  theme_minimal()+
+  geom_text(data = equations_df4, aes(label =paste(X.Year.2018...y....13.41.x..20.97.R.2...0.65.,X.Year.2019...y....15.31.x..20.46.R.2...0.5.,X.Year.2020...y....32.44.x..23.44.R.2...0.59.),x = Inf, y = -Inf, hjust = 1, vjust = 0), size = 2.5)
+```
+
+#Graph5<-
+```{r}
+# Plot graph with trendlines
+Graph5<-ggplot(df_long, aes(x =Windspeed_Averageweekly, y =Nox , color = Year)) +
+  geom_smooth(method = "lm", se = FALSE, linetype = "dotted") +
+  geom_point() +
+
+  facet_wrap(~ 'AverageWeekly_Trendlines of Noxconcentration & Windspeed (2018_2020)', scales = "free_y") +
+  labs(x = "Windspeed_Averageweekly", y = "Noxconcentration", color = "Years") +
+  theme_minimal()+
+  geom_text(data = equations_df5, aes(label =paste(X.Year.2018...y....0.07.x..2.19.R.2...0.01.,X.Year.2019...y...0.28.x..1.98.R.2...0.06.,X.Year.2020...y...1.72.x..1.51.R.2...0.28.),x = Inf, y = -Inf, hjust = 1, vjust = 0), size = 2.5)
+
+```
+
+#MultipleregressionZone
+
+```{r}
+# Convert "Year" to a factor with specified levels
+df_long$Year <- factor(df_long$Year, levels = c("2018", "2019", "2020"))
+```
+
+```{r}
+# Perform multiple linear regressions for each dependent variable
+models <- lapply(dependent_vars, function(dependent_var) {
+  lm(as.formula(paste(dependent_var, "~Noxemission_ + Year")), data = df_long)
+})
+
+```
+
+```{r}
+# Summaries of the regression models
+ lapply(models, summary)
+```
+
+```{r}
+#Combine the models with their respective dependent variable names
+named_models <- setNames(models, dependent_vars)
+
+# Print the named models
+print(named_models)
+```
+```{r}
+# Create a linear regression model
+model2 <- lm(Noxemission_ ~ Year + Nox + Windspeed_Averageweekly + Temperature_Averageweekly, data = df_long)
+
+
+```
+summary(model2)
+
+
+
+
+
+
+
+
+
+```{r}
+# Export plot to PDF
+#ggsave("plotNoxcentrationwind.pdf", plot = , width = 8, height = 6)
+# Export plot to PDF
+#ggsave("plot.pdf", plot, width = 8, height = 6)
+```
+
+
+#Export Graphs
+
+```{r}
+ #List of plot objects
+plot_list <- list(plot1 = GraphA, plot2 = GraphB, plot3 = GraphC, plot4=Graph4, plot5=Graph5)
+
+# Export all plots to PDF
+invisible(lapply(names(plot_list), function(x) ggsave(paste0(x, ".pdf"), plot = plot_list[[x]], width = 8, height = 6)))
+
+```
+
+
+
+
+
+#Equation of line region
+#Grph1text
+```{r}
+# Calculate and annotate equation of the line and R-squared value for each year
+equations <- lapply(unique(df_long$Year), function(year) {
+  sub_df <- subset(df_long, Year == year)
+  model <- lm(Temperature_Averageweekly ~ Noxemission_, data = sub_df)
+  eq <- paste("Year", year, ": y =", round(coef(model)[2], 2), "x", round(coef(model)[1], 2), "R^2 =", round(summary(model)$r.squared, 2))
+  return(eq)
+})
+# Create a dataframe with Year and Equation columns
+equations_df <- data.frame(Year = unique(df_long$Year), equations)
+#colnames(equations_df)
+```
+
+#Grph2text
+```{r}
+# Calculate and annotate equation of the line and R-squared value for each year
+equations2 <- lapply(unique(df_long$Year), function(year) {
+  sub_df <- subset(df_long, Year == year)
+  model <- lm(Windspeed_Averageweekly ~ Noxemission_, data = sub_df)
+  eq <- paste("Year", year, ": y =", round(coef(model)[2], 2), "x+", round(coef(model)[1], 2), "R^2 =", round(summary(model)$r.squared, 2))
+  return(eq)
+})
+# Create a dataframe with Year and Equation columns
+equations_df2 <- data.frame(Year = unique(df_long$Year), equations2)
+#colnames(equations_df2)
+
+```
+
+#Graph3
+```{r}
+# Calculate and annotate equation of the line and R-squared value for each year
+equations3 <- lapply(unique(df_long$Year), function(year) {
+  sub_df <- subset(df_long, Year == year)
+  model <- lm(Nox ~ Noxemission_, data = sub_df)
+  eq <- paste("Year", year, ": y =", round(coef(model)[2], 2), "x+", round(coef(model)[1], 2), "R^2 =", round(summary(model)$r.squared, 2))
+  return(eq)
+})
+# Create a dataframe with Year and Equation columns
+equations_df3 <- data.frame(Year = unique(df_long$Year), equations3)
+#colnames(equations_df3)
+
+```
+
+
+#Graph4
+```{r}
+# Calculate and annotate equation of the line and R-squared value for each year
+equations4 <- lapply(unique(df_long$Year), function(year) {
+  sub_df <- subset(df_long, Year == year)
+  model <- lm(Temperature_Averageweekly ~ Nox, data = sub_df)
+  eq <- paste("Year", year, ": y =", round(coef(model)[2], 2), "x+", round(coef(model)[1], 2), "R^2 =", round(summary(model)$r.squared, 2))
+  return(eq)
+})
+# Create a dataframe with Year and Equation columns
+equations_df4 <- data.frame(Year = unique(df_long$Year), equations4)
+#colnames(equations_df4)
+
+```
+
+#Graph5
+```{r}
+# Calculate and annotate equation of the line and R-squared value for each year
+equations5 <- lapply(unique(df_long$Year), function(year) {
+  sub_df <- subset(df_long, Year == year)
+  model <- lm(Windspeed_Averageweekly ~ Nox, data = sub_df)
+  eq <- paste("Year", year, ": y =", round(coef(model)[2], 2), "x+", round(coef(model)[1], 2), "R^2 =", round(summary(model)$r.squared, 2))
+  return(eq)
+})
+# Create a dataframe with Year and Equation columns
+equations_df5 <- data.frame(Year = unique(df_long$Year), equations5)
+#colnames(equations_df5)
+
+```
+
+
+
+```
+
+
+
+
+
